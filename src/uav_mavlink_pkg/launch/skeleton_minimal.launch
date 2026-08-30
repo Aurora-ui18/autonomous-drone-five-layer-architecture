@@ -1,0 +1,33 @@
+<!-- ================================================================
+五层框架 · 最小骨架启动（通用代码，不含业务层节点）
+包含: 执行层(飞控桥接) + 定位层(状态估计/TF) + 安全旁路 + 记录层
+用途: 不编写任何业务代码即可验证「飞控-定位-安全-记录」框架链路,
+      也是新任务场景开发的起点（业务节点就绪后追加到本文件或新建 launch）
+示例: roslaunch uav_mavlink_pkg skeleton_minimal.launch fc_serial_port:=/dev/ttyUSB0
+参数: config/skeleton_params.yaml（顶层 key = 节点名, 自动落到各节点私有命名空间）
+================================================================ -->
+
+<launch>
+  <!-- 命令行可调参数 -->
+  <arg name="fc_serial_port" default="/dev/ttyXXX" />  <!-- 飞控串口: 按实际设备修改（常见 ttyUSB* / ttyACM* / ttyS*） -->
+  <arg name="fc_baud" default="230400" />              <!-- 飞控波特率 -->
+
+  <!-- 参数加载 (yaml → 各节点私有命名空间) -->
+  <rosparam command="load" file="$(find uav_mavlink_pkg)/config/skeleton_params.yaml" />
+
+  <!-- ======== 执行层: MAVLink 飞控桥接 (10Hz 流式下行) ======== -->
+  <node pkg="uav_mavlink_pkg" type="flight_controller_node.py" name="flight_controller_node" output="screen">
+    <param name="serial_port" value="$(arg fc_serial_port)" />
+    <param name="baud" value="$(arg fc_baud)" />
+  </node>
+
+  <!-- ======== 定位层: 状态估计融合 + TF 坐标变换 ======== -->
+  <node pkg="uav_mavlink_pkg" type="state_estimator_node.py" name="state_estimator_node" output="screen" />
+  <node pkg="uav_mavlink_pkg" type="coordinate_transformer_node.py" name="coordinate_transformer_node" output="screen" />
+
+  <!-- ======== 安全旁路: 独立于业务状态机的监控（发布 SafetyEvent） ======== -->
+  <node pkg="uav_mavlink_pkg" type="safety_supervisor_node.py" name="safety_supervisor_node" output="screen" />
+
+  <!-- ======== 记录层: rosbag + JSONL 飞行记录 ======== -->
+  <node pkg="uav_mavlink_pkg" type="flight_recorder_node.py" name="flight_recorder_node" output="screen" />
+</launch>

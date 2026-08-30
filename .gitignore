@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# ROS / catkin 构建产物
+build/
+devel/
+*.bag
+
+# 日志
+*.log
+logs/
+uav_logs/
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# 交接与内部文档（不随仓库发布）
+说明.md

@@ -1,0 +1,7 @@
+float64 target_x
+float64 target_y
+float64 start_z
+uint8 mode               # 0=VERTICAL  1=DESCEND_45
+---
+bool success
+string message

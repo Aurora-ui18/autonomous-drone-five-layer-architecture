@@ -1,0 +1,2 @@
+# 统一换行符为 LF（ROS/Python 在 Linux 目标机上运行）
+* text=auto eol=lf

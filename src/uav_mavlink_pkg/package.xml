@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>uav_mavlink_pkg</name>
+  <version>1.0.0</version>
+  <description>
+    通用无人机/机器人自主系统五层解耦 ROS 框架（感知 / 定位 / 规划 / 决策 / 执行，
+    外加公共层、安全旁路、记录层）。本包为框架骨架：公共层 + 执行层 + 定位层 +
+    安全旁路 + 记录层，可直接复用于新任务场景；业务层（感知/规划/决策）按
+    docs/框架设计文档.md 第 10 章指南扩展。
+  </description>
+  <maintainer email="uav-framework@example.com">UAV Framework Contributors</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <!-- 核心依赖 -->
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>actionlib_msgs</depend>
+  <depend>tf</depend>
+  <depend>tf2_ros</depend>
+  <depend>cv_bridge</depend>
+  <depend>image_transport</depend>
+
+  <!-- 消息生成 -->
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <!-- 其他常用依赖 -->
+  <depend>visualization_msgs</depend>
+  <depend>std_srvs</depend>
+
+  <export>
+  </export>
+</package>

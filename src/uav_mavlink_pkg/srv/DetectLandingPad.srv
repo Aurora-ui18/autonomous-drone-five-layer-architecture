@@ -1,0 +1,7 @@
+sensor_msgs/Image image
+float64 height
+---
+float64 offset_x         # 机体坐标系下 x 偏移 (m)
+float64 offset_y         # 机体坐标系下 y 偏移 (m)
+bool detected
+float64 confidence

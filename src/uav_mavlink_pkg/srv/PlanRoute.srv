@@ -1,0 +1,7 @@
+string[] nofly_cells
+float64 patrol_height
+string strategy
+---
+WaypointList waypoints
+bool success
+string message

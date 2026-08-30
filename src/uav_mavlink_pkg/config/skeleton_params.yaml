@@ -1,0 +1,96 @@
+# ================================================================
+# 五层框架骨架 · 通用参数示例
+#
+# 组织方式: 顶层 key = 节点名, 子 key = 该节点的私有参数(~xxx)
+# launch 中 <rosparam command="load" file="此文件"/> 会把参数落到
+# /节点名/xxx, 与节点内 rospy.get_param("~xxx") 对应。
+#
+# 换任务场景时: 复制本文件为 场景名.yaml, 修改场地边界/高度/通道等
+# 数值, 再新建对应 launch 加载即可, 节点代码无需改动。
+# ================================================================
+
+# ---- 执行层: MAVLink 飞控桥接 (flight_controller_node) ----
+flight_controller_node:
+  serial_port: "/dev/ttyXXX"   # 飞控串口: 按实际设备修改 (常见 ttyUSB* / ttyACM* / ttyS*)
+  baud: 230400                 # 波特率
+  target_system: 1
+  target_component: 1
+  home_z: 1.0                  # 起飞默认高度 (m)
+  takeoff_timeout: 30.0        # 起飞超时 (s)
+  arm_timeout: 10.0            # 解锁超时 (s)
+
+# ---- 执行层: PWM 舵机/激光集中控制 (gimbal_executor_node) ----
+# 通道映射: MAVLink servoN = ros_ch + 7, 经 /pwm_ctrl 统一下发
+gimbal_executor_node:
+  laser_ch_laser: 4            # 激光笔通道
+  laser_on_us: 2500            # 激光开 PWM (us)
+  laser_off_us: 500            # 激光关 PWM (us)
+  ch_red: 1                    # 红色投放舵机通道
+  ch_green: 2                  # 绿色投放舵机通道
+  ch_blue: 3                   # 蓝色投放舵机通道
+  retract_us: 1500             # 收起 PWM (us)
+  release_us: 2500             # 释放 PWM (us)
+  release_hold_s: 1.0          # 释放后保持时间 (s)
+
+# ---- 执行层: 多段降落 (landing_executor_node) ----
+landing_executor_node:
+  land_descent_stages: [0.8, 0.3, 0.1]  # 分段下降高度 (m)
+  final_land_height: 0.15               # 最终 LAND 触发高度 (m)
+  xy_correction_gain: 0.8               # 降落水平修正增益
+
+# ---- 执行层: LED/蜂鸣器 (led_beeper_node) ----
+led_beeper_node:
+  led_mode: "pwm"              # none / pwm
+  led_gpio: 7
+  led_pwm_channel: 2
+  led_on_us: 2500
+  led_off_us: 500
+  beep_interval: 0.2
+  beep_count: 3
+  led_blink_rate: 5.0
+
+# ---- 定位层: 状态估计融合 (state_estimator_node) ----
+state_estimator_node:
+  publish_rate: 10.0           # /localization/uav_state 发布频率 (Hz)
+  rc_timeout: 3.0              # 遥控信号超时 (s)
+  battery_warning: 10.5        # 低电压告警阈值 (V)
+
+# ---- 定位层: TF 坐标变换 (coordinate_transformer_node) ----
+coordinate_transformer_node:
+  camera_x: 0.0                # 相机相对机体安装偏移 (m)
+  camera_y: 0.0
+  camera_z: 0.0
+
+# ---- 定位层: 降落点视觉定位 (landing_pad_locator_node) ----
+# Hough 检测停机坪黑圆, 输出圆心像素偏移, 供降落视觉伺服
+landing_pad_locator_node:
+  focal_length_px: 346.0       # 等效焦距 (像素) — 按实际相机标定修改
+  gray_threshold: 60           # 黑圆暗区灰度阈值
+  max_brightness: 80
+  hough_dp: 1.2
+  hough_min_dist: 100
+  hough_param1: 50
+  hough_param2: 30
+  min_radius: 20
+  max_radius: 120
+  publish_debug: true
+
+# ---- 安全旁路 (safety_supervisor_node) ----
+# 独立监控: 越界/低电压/遥控丢失/定位丢失 → SafetyEvent(CRITICAL)
+safety_supervisor_node:
+  field_min_x: 0.0             # 场地边界 (m) — 按实际场地修改
+  field_max_x: 5.0
+  field_min_y: 0.0
+  field_max_y: 4.0
+  max_height: 2.5              # 最大飞行高度 (m)
+  min_voltage: 10.5            # 最低电压 (V)
+  rc_timeout: 3.0              # 遥控超时 (s)
+  pose_timeout: 1.0            # 定位超时 (s)
+
+# ---- 记录层 (flight_recorder_node) ----
+flight_recorder_node:
+  record_bag: true             # rosbag 记录
+  record_jsonl: true           # JSONL 记录
+  record_images: false         # 图像记录 (默认关闭, 数据量大)
+  output_dir: "~/uav_logs"     # 输出目录
+  max_bag_size_mb: 2048.0      # 单 bag 最大体积 (MB)
