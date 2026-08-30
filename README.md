@@ -154,7 +154,7 @@ cd .. && catkin_make && source devel/setup.bash
 ### 最小骨架启动（无需写任何业务代码）
 
 ```bash
-roslaunch uav_mavlink_pkg skeleton_minimal.launch fc_serial_port:=/dev/ttyUSB0
+roslaunch uav_mavlink_pkg skeleton_minimal.launch fc_serial_port:=/dev/ttyXXX
 ```
 
 该命令启动 **执行层（MAVLink 桥接）+ 定位层（状态估计 / TF）+ 安全旁路 + 记录层** 共 5 个通用节点，即可验证框架核心链路。串口按实际设备修改。
@@ -254,7 +254,7 @@ scripts/
 | `set_pwm_out` / `set_beep_open` 舵机与蜂鸣器 | 执行层 `gimbal_executor_node` + `led_beeper_node`（PWM 集中管理） |
 | `get_img*` 图像获取 | 感知层 `camera_node` + 检测器节点 |
 | `_wait_position` / `Position_calibration` 定位等待与标定 | 定位层 `state_estimator_node` + `coordinate_transformer_node` |
-| `fit_circle_*` / 圆心拟合算法 | 公共层 `path_planner.py` 与感知检测器（纯逻辑，可脱离 ROS 测试） |
+| `fit_circle_*` / 圆心拟合算法 | 感知/定位层圆心检测节点（如 `landing_pad_locator_node` 的 Hough 圆检测） |
 | `get_rc_data` / `P_log` 遥控数据与日志 | 执行层话题发布 + 记录层 `flight_recorder_node` |
 
 **进化的本质**：不是推倒重写，而是职责归位——2025 H 仓库至今保留着 28 届代码备份（`legacy/`），见证逐届继承；2024 D 起每届只重写"必改层"，执行/定位/安全/记录持续复用至今。

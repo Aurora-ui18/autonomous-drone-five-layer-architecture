@@ -3,7 +3,9 @@
 包含: 执行层(飞控桥接) + 定位层(状态估计/TF) + 安全旁路 + 记录层
 用途: 不编写任何业务代码即可验证「飞控-定位-安全-记录」框架链路,
       也是新任务场景开发的起点（业务节点就绪后追加到本文件或新建 launch）
-示例: roslaunch uav_mavlink_pkg skeleton_minimal.launch fc_serial_port:=/dev/ttyUSB0
+说明: gimbal/landing/led 三个执行节点默认不随骨架启动 —— 无业务层
+      决策时不应驱动舵机/降落/蜂鸣器; 需要时按下方格式自行追加
+示例: roslaunch uav_mavlink_pkg skeleton_minimal.launch fc_serial_port:=/dev/ttyXXX
 参数: config/skeleton_params.yaml（顶层 key = 节点名, 自动落到各节点私有命名空间）
 ================================================================ -->
 

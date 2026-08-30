@@ -60,7 +60,7 @@ class FlightControllerNode(object):
         rospy.init_node("flight_controller_node")
 
         # 参数
-        self._serial_port = rospy.get_param("~serial_port", "/dev/ttyS6")
+        self._serial_port = rospy.get_param("~serial_port", "/dev/ttyXXX")  # 按实际串口设备修改
         self._baud = int(rospy.get_param("~baud", 230400))
         self._target_system = int(rospy.get_param("~target_system", 1))
         self._target_component = int(rospy.get_param("~target_component", 1))
