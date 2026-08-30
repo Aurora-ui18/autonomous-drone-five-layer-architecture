@@ -206,7 +206,7 @@ autonomous-drone-five-layer-architecture/
 
 ## 演进史与实飞验证
 
-框架不是一次性设计，而是在五届全国级竞赛中**实飞迭代**沉淀而来——每一届都在上一届的代码上演进，最终收敛为五层解耦架构：
+框架不是一次性设计，而是在五届全国级竞赛中实飞迭代沉淀而来——从研读学长的 28 届国赛代码起步、完成比赛后自主设计五层架构，其后每届都在实战中演进：
 
 | 阶段 | 场景 | 代码形态 | 关键演进 | 规模（.py / 行 / 自定义接口） |
 |------|------|---------|---------|:---:|
@@ -297,13 +297,9 @@ scripts/
 
 本项目基于 [MIT License](LICENSE) 开源。
 
-框架迭代受益于开源社区：
+**框架的由来**：我的无人机竞赛之路，从逐行研读学长留下的第 28 届 CRAIC 国赛代码开始——学透并用它完成比赛后，我针对脚本式架构在维护与复用上的痛点，结合社区工程实践自主设计了这套五层解耦框架，并在其后每一届赛事中实飞验证、逐题优化至今。
 
-- [pymavlink](https://github.com/ArduPilot/pymavlink) — MAVLink 协议通信
-- [FAST-LIO](https://github.com/hku-mars/FAST_LIO) — 激光惯性里程计（定位层输入源）
-- ROS / catkin 社区
-
-框架由多届竞赛队员共同实飞迭代而成，感谢每一届并肩调试到深夜的队友。
+感谢学长的代码启蒙、每一届并肩调试到深夜的队友，以及开源社区：[pymavlink](https://github.com/ArduPilot/pymavlink)（MAVLink 协议通信）、[FAST-LIO](https://github.com/hku-mars/FAST_LIO)（激光惯性里程计，定位层输入源）、ROS / catkin 社区。
 
 ---
 
